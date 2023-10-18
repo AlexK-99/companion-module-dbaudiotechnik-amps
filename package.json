@@ -12,11 +12,15 @@
 		"url": "git+https://github.com/AlexK-99/companion-module-d-und-b-5d"
 	},
 	"dependencies": {
+<<<<<<< HEAD
 		"@companion-module/base": "~1.4.0",
 		"aes70": "^1.5.1"
+=======
+		"@companion-module/base": "~1.5.1"
+>>>>>>> 95b28fd00ee31f60df54684a01c5f32ed5f29ff1
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^1.2.0"
+		"@companion-module/tools": "^1.4.1"
 	},
 	"prettier": "@companion-module/tools/.prettierrc.json"
 }
