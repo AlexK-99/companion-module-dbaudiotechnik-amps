@@ -9,7 +9,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/bitfocus/companion-module-d-und-b-5d.git"
+		"url": "git+https://github.com/AlexK-99/companion-module-d-und-b-5d"
 	},
 	"dependencies": {
 		"@companion-module/base": "~1.4.0",
