@@ -1,5 +1,5 @@
 import { combineRgb } from '@companion-module/base'
-import { Types } from 'aes70';
+import { Types } from 'aes70'
 export async function updateF(self) {
 	self.setFeedbackDefinitions({
 		ChannelState: {
@@ -19,16 +19,14 @@ export async function updateF(self) {
 						{ id: 0, label: 'A' },
 						{ id: 1, label: 'B' },
 						{ id: 2, label: 'C' },
-						{ id: 3, label: 'D' }
+						{ id: 3, label: 'D' },
 					],
-					default: 0
+					default: 0,
 				},
-
 			],
 			callback: (feedback) => {
-				if(self.ready) {
+				if (self.ready) {
 					return self.muteState[feedback.options.feedmute]
-
 				}
 			},
 		},
@@ -42,9 +40,8 @@ export async function updateF(self) {
 			},
 			options: [],
 			callback: (feedback) => {
-				if(self.ready) {
+				if (self.ready) {
 					return self.powerState
-
 				}
 			},
 		},

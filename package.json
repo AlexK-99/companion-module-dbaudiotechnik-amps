@@ -5,20 +5,19 @@
 	"scripts": {
 		"format": "prettier -w ."
 	},
-	"type":"module",
+	"type": "module",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/AlexK-99/companion-module-d-und-b-5d"
 	},
 	"dependencies": {
-		"aes70": "^1.5.1",
-		"@companion-module/base": "~1.5.1"
-
+		"@companion-module/base": "~1.5.1",
+		"aes70": "^1.5.1"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^1.4.1"
+		"@companion-module/tools": "^1.4.1",
+		"prettier": "3.0.3"
 	},
 	"prettier": "@companion-module/tools/.prettierrc.json"
 }
-   
