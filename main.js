@@ -35,14 +35,23 @@ class ModuleInstance extends InstanceBase {
 					this.log('warn', 'Aes70 Device Connection closed!')
 					this.ready = false
 					this.log('warn', 'Aes70 Device Connection Error try reconnect in 10 Seconds!')
+					this.updateStatus(InstanceStatus.ConnectionFailure)
 					setTimeout(() => {
-						this.updateStatus(InstanceStatus.ConnectionFailure)
+						this.updateStatus(InstanceStatus.Connecting)
 						this.connect()
 					}, 10000)
 				})
 
 				this.remoteDevice.on("error", (args)=> {
+					this.log('warn', 'Aes70 Device Connection closed with Error!')
 					this.log('error', JSON.stringify(args))
+					this.ready = false
+					this.log('warn', 'Aes70 Device Connection Error try reconnect in 10 Seconds!')
+					this.updateStatus(InstanceStatus.ConnectionFailure)
+					setTimeout(() => {
+						this.updateStatus(InstanceStatus.Connecting)
+						this.connect()
+					}, 10000)
 				})
 				this.updateStatus(InstanceStatus.Ok)
 				this.updateActions() // export actions
@@ -126,10 +135,6 @@ class ModuleInstance extends InstanceBase {
 
 	// When module gets deleted
 	async destroy() {
-		if (this.aescon) {
-			this.muteObj = []
-			this.aescon.close()
-		}
 		this.updateStatus(InstanceStatus.Disconnected)
 		this.log('debug', 'destroy')
 	}
