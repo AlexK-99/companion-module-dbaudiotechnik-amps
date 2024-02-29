@@ -1,12 +1,12 @@
 {
-	"id": "d-und-b-5d",
-	"name": "D&B-Audio-5D",
-	"shortname": "D&B-5D",
-	"description": "Control D&B 5D Amp",
-	"version": "0.1.2",
+	"id": "d-und-b-amps",
+	"name": "D&B-Audio-Amps",
+	"shortname": "D&B-AMPS",
+	"description": "Control D&B AmpS",
+	"version": "0.1.3",
 	"license": "MIT",
-	"repository": "git+https://github.com/AlexK-99/companion-module-d-und-b-5d.git",
-	"bugs": "https://github.com/AlexK-99/companion-module-d-und-b-5d/issues",
+	"repository": "git+https://github.com/AlexK-99/companion-module-d-und-b-amps.git",
+	"bugs": "https://github.com/AlexK-99/companion-module-d-und-b-amps/issues",
 	"maintainers": [
 		{
 			"name": "Alexander Kettner",
