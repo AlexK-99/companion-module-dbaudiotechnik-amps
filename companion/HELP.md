@@ -2,7 +2,7 @@
 
 In instaces tab specify the ip and port you want to connect.
 
-**Available amps for D&B Audio Amps**
+**Testet D&B Audio Amps**
 - 5D
 
 **Available commands for D&B Audio Amps**
