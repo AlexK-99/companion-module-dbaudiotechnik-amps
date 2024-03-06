@@ -19,7 +19,7 @@
 		"apiVersion": "0.0.0",
 		"entrypoint": "../main.js"
 	},
-	"legacyIds": [],
+	"legacyIds": ["d-und-b-5d"],
 	"manufacturer": "D&B-Audio",
 	"products": ["5D"],
 	"keywords": ["Amp", "Audio"]

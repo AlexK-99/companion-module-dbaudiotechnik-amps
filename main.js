@@ -10,6 +10,7 @@ class ModuleInstance extends InstanceBase {
 
 	async init(config) {
 		this.config = config
+		this.port = this.getPortFromType(config.type)
 		this.info = {}
 		this.muteObj = []
 		this.muteState = [true, true, true, true]
@@ -18,14 +19,29 @@ class ModuleInstance extends InstanceBase {
 		this.ready = false
 		this.updateActions(InstanceStatus.Connecting)
 		this.updateVariableDefinitions()
-		this.log('info', 'Aes70 Device Connection')
+		this.log('info', 'Aes70 Device Connection at port: ' + this.port)
 		this.connect()
+	}
+
+	getPortFromType(type) {
+		switch(type) {
+			case "5d":
+				return 50014;
+			case "d40":
+				return 50014;
+			case "40d":
+				return 50014;
+			case "custom":
+				return this.config.port;
+			default:
+				return 30013;
+		}
 	}
 
 	connect() {
 		TCPConnection.connect({
 			host: this.config.host,
-			port: this.config.port,
+			port: this.port,
 		})
 			.then((con) => {
 				this.aescon = con
@@ -141,7 +157,7 @@ class ModuleInstance extends InstanceBase {
 
 	async configUpdated(config) {
 		this.config = config
-
+		this.port = this.getPortFromType(config.type)
 		if (this.aescon) {
 			this.muteObj = []
 			this.aescon.close()
@@ -169,16 +185,34 @@ class ModuleInstance extends InstanceBase {
 			{
 				type: 'textinput',
 				id: 'host',
-				label: 'Target IP',
+				label: 'Amp IP',
 				width: 8,
 				regex: Regex.IP,
 				default: '168.178.10.110',
+			},
+			{
+				id: 'type',
+				type: 'dropdown',
+				label: 'Amp Typ',
+				width: 4,
+				choices: [
+					{ id: '5d', label: '5D' },
+					{ id: '10d', label: '10D' },
+					{ id: '30d', label: '30D' },
+					{ id: '40d', label: '40D' },
+					{ id: 'd20', label: 'D20' },
+					{ id: 'd40', label: 'D40' },
+					{ id: 'd80', label: 'D80' },
+					{ id: 'custom', label: 'Custom' },
+					],
+				default: '5d'
 			},
 			{
 				type: 'textinput',
 				id: 'port',
 				label: 'Target Port',
 				width: 4,
+				isVisible: (options) => options['type'] == "custom",
 				regex: Regex.PORT,
 				default: 50014,
 			},
