@@ -15,12 +15,39 @@ class ModuleInstance extends InstanceBase {
 		this.muteObj = []
 		this.muteState = [true, true, true, true]
 		this.powerState = true
+		this.powerHours = 0;
 		this.powerObj = {}
 		this.ready = false
 		this.updateActions(InstanceStatus.Connecting)
 		this.updateVariableDefinitions()
 		this.log('info', 'Aes70 Device Connection at port: ' + this.port)
 		this.connect()
+	}
+
+	getPowerHourPath(type) {
+		switch (type) {
+			case "5d":
+				return "Log_Box/Log_PowerOnHours";
+			case "d40":
+				return "Log/Log_PowerOnHours";
+			case "40d":
+				return "Log/Log_PowerOnHours";
+			default:
+				return "Log/Log_PowerOnHours";
+		}
+	}
+
+	getPowerPath(type) {
+		switch (type) {
+			case "5d":
+				return "Settings_Box/Settings_PwrOn";
+			case "d40":
+				return "Settings/Settings_PwrOn";
+			case "40d":
+				return "Settings/Settings_PwrOn";
+			default:
+				return "Settings/Settings_PwrOn";
+		}
 	}
 
 	getPortFromType(type) {
@@ -38,34 +65,68 @@ class ModuleInstance extends InstanceBase {
 		}
 	}
 
+
+	setAmpPowerHours(hours) {
+		this.powerHours = hours;
+		this.setVariableValues({'amp_power_hours': this.powerHours})
+	}
+	setAmpPower(power, type) {
+		let powerType = false;
+		switch(type) {
+			case "5d":
+				powerType = power;
+			break;
+			case "d40":
+				powerType = !power;
+			break;
+			case "40d":
+				powerType = !power;
+			break;
+			default:
+				powerType = !power;
+		}
+		this.powerState = powerType;
+		this.checkFeedbacks('PowerState')
+		this.setVariableValues({'amp_power': this.powerState})
+	}
+
+	setAmpMute(index, mute) {
+		this.muteState[index] = mute;
+		this.checkFeedbacks('ChannelState')
+		let varindex = `amp_mute_${index}`;
+		this.setVariableValues({[varindex]: mute})
+	}
+
 	connect() {
 		TCPConnection.connect({
 			host: this.config.host,
 			port: this.port,
 		})
 			.then((con) => {
+				this.log('info', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connected');
 				this.aescon = con
 				this.remoteDevice = new RemoteDevice(con)
 				this.remoteDevice.set_keepalive_interval(1)
 				this.remoteDevice.on("close", (args)=> {
-					this.log('warn', 'Aes70 Device Connection closed!')
+					this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection closed!')
 					this.ready = false
-					this.log('warn', 'Aes70 Device Connection Error try reconnect in 10 Seconds!')
+					this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection Error try reconnect in 10 Seconds!')
 					this.updateStatus(InstanceStatus.ConnectionFailure)
 					setTimeout(() => {
 						this.updateStatus(InstanceStatus.Connecting)
+						this.aescon.cleanup()
 						this.connect()
 					}, 10000)
 				})
 
 				this.remoteDevice.on("error", (args)=> {
-					this.log('warn', 'Aes70 Device Connection closed with Error!')
+					this.log('warn', 'Date: '+ new Date().toISOString() +' | Aes70 Device Connection closed with Error!')
 					this.log('error', JSON.stringify(args))
 					this.ready = false
-					this.log('warn', 'Aes70 Device Connection Error try reconnect in 10 Seconds!')
-					this.updateStatus(InstanceStatus.ConnectionFailure)
+					this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection Error try reconnect in 10 Seconds!')
 					setTimeout(() => {
-						this.updateStatus(InstanceStatus.Connecting)
+						this.updateStatus(InstanceStatus.UnknownError, JSON.stringify(args)	);
+						this.destroy()
 						this.connect()
 					}, 10000)
 				})
@@ -82,8 +143,17 @@ class ModuleInstance extends InstanceBase {
 					});
 				})
 				this.remoteDevice.get_role_map().then((map) => {
-					if (map.get('Settings_Box/Settings_PwrOn')) {
-						this.powerObj = map.get('Settings_Box/Settings_PwrOn')
+					if(map.get(this.getPowerHourPath(this.config.type))) {
+						this.intervalPower = setInterval(()=> {
+							let powerh = map.get(this.getPowerHourPath(this.config.type))
+							powerh.GetReading().then((v) => {
+								this.setAmpPowerHours(v.values[0])
+							})
+
+						},10000)
+					}
+					if (map.get(this.getPowerPath(this.config.type))) {
+						this.powerObj = map.get(this.getPowerPath(this.config.type))
 						this.powerObj.GetPosition().then((v) => {
 							if (v.item(0) == 0) {
 								this.setAmpPower(true)
@@ -96,6 +166,7 @@ class ModuleInstance extends InstanceBase {
 							if (val == 0) {
 								this.setAmpPower(true)
 							} else {
+
 								this.setAmpPower(false)
 							}
 							this.checkFeedbacks('PowerState')
@@ -125,10 +196,11 @@ class ModuleInstance extends InstanceBase {
 													if (val == 1) {
 														this.setAmpMute(index, true)
 													} else {
-														this.setAmpMute(index, true)
+														this.setAmpMute(index, false)
 													}
 													this.checkFeedbacks('ChannelState')
 												})
+
 											})
 										}
 										i++
@@ -141,16 +213,22 @@ class ModuleInstance extends InstanceBase {
 			})
 			.catch((e) => {
 				this.ready = false
-				this.log('warn', 'Aes70 Device Connection Error try reconnect in 10 Seconds!')
+				this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection Error try reconnect in 10 Seconds!')
 				setTimeout(() => {
 					this.connect()
-					this.updateStatus(InstanceStatus.ConnectionFailure)
+					this.updateStatus(InstanceStatus.UnknownError, JSON.stringify(e)	);
 				}, 10000)
 			})
 	}
 
 	// When module gets deleted
 	async destroy() {
+		clearInterval(this.intervalPower)
+		this.muteObj.forEach((v)=> {
+			v.OnStateChanged.unsubscribe();
+		});
+		this.powerObj.OnPositionChanged.unsubscribe();
+		this.aescon.cleanup()
 		this.updateStatus(InstanceStatus.Disconnected)
 		this.log('debug', 'destroy')
 	}
@@ -160,23 +238,10 @@ class ModuleInstance extends InstanceBase {
 		this.port = this.getPortFromType(config.type)
 		if (this.aescon) {
 			this.muteObj = []
-			this.aescon.close()
+			this.aescon.cleanup()
 			this.updateStatus(InstanceStatus.Connecting)
 			this.connect()
 		}
-	}
-
-	setAmpPower(power) {
-		this.powerState = power;
-		this.checkFeedbacks('PowerState')
-		this.setVariableValues({'amp_power': this.powerState})
-	}
-
-	setAmpMute(index, mute) {
-		this.muteState[index] = mute;
-		this.checkFeedbacks('ChannelState')
-		let varindex = `amp_mute_${index}`;
-		this.setVariableValues({[varindex]: mute})
 	}
 
 	// Return config fields for web config
@@ -215,7 +280,7 @@ class ModuleInstance extends InstanceBase {
 				isVisible: (options) => options['type'] == "custom",
 				regex: Regex.PORT,
 				default: 50014,
-			},
+			}
 		]
 	}
 

@@ -3,7 +3,7 @@
 	"name": "D&B-Audio-Amps",
 	"shortname": "D&B-AMPS",
 	"description": "Control D&B Amps",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"license": "MIT",
 	"repository": "git+https://github.com/AlexK-99/companion-module-d-und-b-amps.git",
 	"bugs": "https://github.com/AlexK-99/companion-module-d-und-b-amps/issues",

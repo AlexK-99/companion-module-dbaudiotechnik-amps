@@ -13,3 +13,5 @@ Updates
 0.1.3 - Name change to companion-module-d&b-amp
 <br>
 0.2.0 - Start of implementation different types of amplifiers
+<br>
+0.2.1 - Add Support 40D
