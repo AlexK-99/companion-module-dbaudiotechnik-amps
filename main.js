@@ -52,12 +52,20 @@ class ModuleInstance extends InstanceBase {
 
 	getPortFromType(type) {
 		switch(type) {
-			case "5d":
+			case "5D":
 				return 50014;
-			case "d40":
+			case "10D":
+				return 30013;
+			case "30D":
+				return 30013;
+			case "40D":
 				return 50014;
-			case "40d":
+			case "D20":
+				return 30013;
+			case "D40":
 				return 50014;
+			case "D80":
+				return 30013;
 			case "custom":
 				return this.config.port;
 			default:
