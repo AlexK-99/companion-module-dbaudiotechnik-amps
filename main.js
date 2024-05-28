@@ -26,11 +26,13 @@ class ModuleInstance extends InstanceBase {
 
 	getPowerHourPath(type) {
 		switch (type) {
-			case "5d":
+			case "5D":
 				return "Log_Box/Log_PowerOnHours";
-			case "d40":
+			case "D20":
 				return "Log/Log_PowerOnHours";
-			case "40d":
+			case "D40":
+				return "Log/Log_PowerOnHours";
+			case "40D":
 				return "Log/Log_PowerOnHours";
 			default:
 				return "Log/Log_PowerOnHours";
@@ -39,11 +41,11 @@ class ModuleInstance extends InstanceBase {
 
 	getPowerPath(type) {
 		switch (type) {
-			case "5d":
+			case "5D":
 				return "Settings_Box/Settings_PwrOn";
-			case "d40":
+			case "D40":
 				return "Settings/Settings_PwrOn";
-			case "40d":
+			case "40D":
 				return "Settings/Settings_PwrOn";
 			default:
 				return "Settings/Settings_PwrOn";
