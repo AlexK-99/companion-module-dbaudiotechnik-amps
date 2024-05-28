@@ -276,7 +276,7 @@ export function updateA(self) {
 				},
 			],
 			callback: async (event) => {
-				// ideally, one would not use the aes70 object numbers, but the roles ArrayProcessing/ArrayProcessing_Name1 to 40 to be compatible with other amps
+				// ideally, one would not use the aes70 object numbers, but the roles ArrayProcessing/ArrayProcessing_Enable1 to 40 to be compatible with other amps, where Enable1 is speaker a preset 1, Enable5 speaker a preset 2 etc.
 				const startONo = 269521410;			
 				const channelOffset = 32768;
 				const presetOffset = 1048576;
