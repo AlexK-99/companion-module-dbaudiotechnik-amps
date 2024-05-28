@@ -20,17 +20,19 @@ class ModuleInstance extends InstanceBase {
 		this.ready = false
 		this.updateActions(InstanceStatus.Connecting)
 		this.updateVariableDefinitions()
-		this.log('info', 'Aes70 Device Connection at port: ' + this.port)
+		this.log('info', 'AES70 Device Connection at port: ' + this.port)
 		this.connect()
 	}
 
 	getPowerHourPath(type) {
 		switch (type) {
-			case "5d":
+			case "5D":
 				return "Log_Box/Log_PowerOnHours";
-			case "d40":
+			case "D20":
 				return "Log/Log_PowerOnHours";
-			case "40d":
+			case "D40":
+				return "Log/Log_PowerOnHours";
+			case "40D":
 				return "Log/Log_PowerOnHours";
 			default:
 				return "Log/Log_PowerOnHours";
@@ -39,11 +41,11 @@ class ModuleInstance extends InstanceBase {
 
 	getPowerPath(type) {
 		switch (type) {
-			case "5d":
+			case "5D":
 				return "Settings_Box/Settings_PwrOn";
-			case "d40":
+			case "D40":
 				return "Settings/Settings_PwrOn";
-			case "40d":
+			case "40D":
 				return "Settings/Settings_PwrOn";
 			default:
 				return "Settings/Settings_PwrOn";
@@ -52,12 +54,20 @@ class ModuleInstance extends InstanceBase {
 
 	getPortFromType(type) {
 		switch(type) {
-			case "5d":
+			case "5D":
 				return 50014;
-			case "d40":
+			case "10D":
+				return 30013;
+			case "30D":
+				return 30013;
+			case "40D":
 				return 50014;
-			case "40d":
+			case "D20":
+				return 30013;
+			case "D40":
 				return 50014;
+			case "D80":
+				return 30013;
 			case "custom":
 				return this.config.port;
 			default:
@@ -73,13 +83,13 @@ class ModuleInstance extends InstanceBase {
 	setAmpPower(power, type) {
 		let powerType = false;
 		switch(type) {
-			case "5d":
+			case "5D":
 				powerType = power;
 			break;
-			case "d40":
+			case "D40":
 				powerType = !power;
 			break;
-			case "40d":
+			case "40D":
 				powerType = !power;
 			break;
 			default:
@@ -97,20 +107,24 @@ class ModuleInstance extends InstanceBase {
 		this.setVariableValues({[varindex]: mute})
 	}
 
+	setAmpAPpreset(APpreset){
+		// ap preset variables and feedback should get set here
+	}
+
 	connect() {
 		TCPConnection.connect({
 			host: this.config.host,
 			port: this.port,
 		})
 			.then((con) => {
-				this.log('info', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connected');
+				this.log('info', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connected');
 				this.aescon = con
 				this.remoteDevice = new RemoteDevice(con)
 				this.remoteDevice.set_keepalive_interval(1)
 				this.remoteDevice.on("close", (args)=> {
-					this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection closed!')
+					this.log('warn', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connection closed!')
 					this.ready = false
-					this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection Error try reconnect in 10 Seconds!')
+					this.log('warn', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connection Error try reconnect in 10 Seconds!')
 					this.updateStatus(InstanceStatus.ConnectionFailure)
 					setTimeout(() => {
 						this.updateStatus(InstanceStatus.Connecting)
@@ -120,10 +134,10 @@ class ModuleInstance extends InstanceBase {
 				})
 
 				this.remoteDevice.on("error", (args)=> {
-					this.log('warn', 'Date: '+ new Date().toISOString() +' | Aes70 Device Connection closed with Error!')
+					this.log('warn', 'Date: '+ new Date().toISOString() +' | AES70 Device Connection closed with Error!')
 					this.log('error', JSON.stringify(args))
 					this.ready = false
-					this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection Error try reconnect in 10 Seconds!')
+					this.log('warn', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connection Error try reconnect in 10 Seconds!')
 					setTimeout(() => {
 						this.updateStatus(InstanceStatus.UnknownError, JSON.stringify(args)	);
 						this.destroy()
@@ -213,7 +227,7 @@ class ModuleInstance extends InstanceBase {
 			})
 			.catch((e) => {
 				this.ready = false
-				this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection Error try reconnect in 10 Seconds!')
+				this.log('warn', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connection Error try reconnect in 10 Seconds!')
 				setTimeout(() => {
 					this.connect()
 					this.updateStatus(InstanceStatus.UnknownError, JSON.stringify(e)	);

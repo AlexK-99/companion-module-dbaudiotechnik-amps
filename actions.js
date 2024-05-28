@@ -1,4 +1,4 @@
-import { Types } from 'aes70'
+import { Types, RemoteControlClasses } from 'aes70';
 
 export function updateA(self) {
 	self.setActionDefinitions({
@@ -12,9 +12,9 @@ export function updateA(self) {
 					choices: [
 						{ id: 1, label: 'On' },
 						{ id: 0, label: 'Off' },
-						{ id: -1, label: 'Toggel' },
+						{ id: -1, label: 'Toggle' },
 					],
-					default: 0,
+					default: -1,
 				},
 			],
 			callback: async (event) => {
@@ -89,7 +89,7 @@ export function updateA(self) {
 						{ id: 3, label: 'D' },
 						{ id: -1, label: 'All' },
 					],
-					default: 0,
+					default: -1,
 				},
 			],
 			callback: async (event) => {
@@ -132,7 +132,7 @@ export function updateA(self) {
 						{ id: 3, label: 'D' },
 						{ id: -1, label: 'All' },
 					],
-					default: 0,
+					default: -1,
 				},
 			],
 			callback: async (event) => {
@@ -162,10 +162,10 @@ export function updateA(self) {
 			},
 		},
 		toggelmute_action: {
-			name: 'Toggel Amp Channel',
+			name: 'Toggle Amp Channel',
 			options: [
 				{
-					id: 'toggelmute',
+					id: 'togglemute',
 					type: 'dropdown',
 					label: 'Channel',
 					choices: [
@@ -175,12 +175,12 @@ export function updateA(self) {
 						{ id: 3, label: 'D' },
 						{ id: -1, label: 'All' },
 					],
-					default: 0,
+					default: -1,
 				},
 			],
 			callback: async (event) => {
 				if (self.ready) {
-					if (event.options.toggelmute === -1) {
+					if (event.options.togglemute === -1) {
 						self.muteObj.forEach((obj, index) => {
 							obj
 								.GetState()
@@ -210,23 +210,23 @@ export function updateA(self) {
 								})
 						})
 					} else {
-						self.muteObj[event.options.toggelmute]
+						self.muteObj[event.options.togglemute]
 							.GetState()
 							.then((v) => {
 								if (v === Types.OcaMuteState.Muted) {
-									self.muteObj[event.options.toggelmute]
+									self.muteObj[event.options.togglemute]
 										.SetState(Types.OcaMuteState.Unmuted)
 										.then(() => {
-											self.log('info', 'Unmute Ch: ' + numberToChar(event.options.toggelmute))
+											self.log('info', 'Unmute Ch: ' + numberToChar(event.options.togglemute))
 										})
 										.catch((err) => {
 											self.log('error', err.toString())
 										})
 								} else {
-									self.muteObj[event.options.toggelmute]
+									self.muteObj[event.options.togglemute]
 										.SetState(Types.OcaMuteState.Muted)
 										.then(() => {
-											self.log('info', 'Mute Ch: ' + numberToChar(event.options.toggelmute))
+											self.log('info', 'Mute Ch: ' + numberToChar(event.options.togglemute))
 										})
 										.catch((err) => {
 											self.log('error', err.toString())
@@ -238,6 +238,66 @@ export function updateA(self) {
 							})
 					}
 				}
+			},
+		},
+		loadAPpreset_action: {
+			name: 'Load Array Processing Preset (D20)',
+			options: [
+				{
+					id: 'APspeaker',
+					type: 'dropdown',
+					label: 'Speaker',
+					choices: [
+						{ id: 0, label: 'A' },
+						{ id: 1, label: 'B' },
+						{ id: 2, label: 'C' },
+						{ id: 3, label: 'D' },
+						{ id: -1, label: 'All' },
+					],
+					default: -1,
+				},
+				{
+					id: 'APpreset',
+					type: 'dropdown',
+					label: 'Preset Number',
+					choices: [
+						{ id: 0, label: '1 (bypass)' },
+						{ id: 1, label: '2' },
+						{ id: 2, label: '3' },
+						{ id: 3, label: '4' },
+						{ id: 4, label: '5' },
+						{ id: 5, label: '6' },
+						{ id: 6, label: '7' },
+						{ id: 7, label: '8' },
+						{ id: 8, label: '9' },
+						{ id: 9, label: '10' },
+					],
+					default: 0,
+				},
+			],
+			callback: async (event) => {
+				// ideally, one would not use the aes70 object numbers, but the roles ArrayProcessing/ArrayProcessing_Name1 to 40 to be compatible with other amps
+				const startONo = 269521410;			
+				const channelOffset = 32768;
+				const presetOffset = 1048576;
+				try {
+					if (event.options.APspeaker === -1) { // All speakers selected
+						for (let i = 0; i < 4; i++) {
+							const switchID = startONo + event.options.APpreset * presetOffset + i * channelOffset;
+							const fanSwitch = new RemoteControlClasses.OcaSwitch(switchID.toString(), self.remoteDevice);
+							await fanSwitch.SetPosition(1);
+							self.log('info', 'Switch ' + switchID + ' set to ON');
+						}
+					} else { // Individual speaker selected
+						const switchID = startONo + event.options.APpreset * presetOffset + event.options.APspeaker * channelOffset;
+						const fanSwitch = new RemoteControlClasses.OcaSwitch(switchID.toString(), self.remoteDevice);
+						await fanSwitch.SetPosition(1);
+						self.log('info', 'Switch ' + switchID + ' set to ON');
+					}
+				} catch (error) {
+					self.log('error', 'Error setting switch position:', error);
+				}
+				// }
 			},
 		},
 	})
