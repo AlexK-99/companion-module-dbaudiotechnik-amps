@@ -1,9 +1,11 @@
 ## D&B Audio Amps
 
-In instaces tab specify the ip and port you want to connect.
+Specify the IP address of the amp you want to connect to.
 
-**Tested D&B Audio Amps**
+**Supported D&B Audio Amps**
 - 5D
+- 10D (untested)
+- 30D (untested)
 - 40D
 - D20
 - D40
