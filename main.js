@@ -83,13 +83,13 @@ class ModuleInstance extends InstanceBase {
 	setAmpPower(power, type) {
 		let powerType = false;
 		switch(type) {
-			case "5d":
+			case "5D":
 				powerType = power;
 			break;
-			case "d40":
+			case "D40":
 				powerType = !power;
 			break;
-			case "40d":
+			case "40D":
 				powerType = !power;
 			break;
 			default:
