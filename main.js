@@ -284,7 +284,7 @@ class ModuleInstance extends InstanceBase {
 					{ id: 'D80', label: 'D80' },
 					{ id: 'custom', label: 'Custom' },
 					],
-				default: '5d'
+				default: '5D'
 			},
 			{
 				type: 'textinput',
