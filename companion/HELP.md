@@ -2,15 +2,18 @@
 
 In instaces tab specify the ip and port you want to connect.
 
-**Testet D&B Audio Amps**
+**Tested D&B Audio Amps**
 - 5D
-- 40d
+- 40D
+- D20
+- D40
+- D80
 
 **Available commands for D&B Audio Amps**
 
-- Power On/Off/Toggel
-- Mute/Unmute Channel A/B/C/D
-
+- Power On/Off/Toggle
+- Mute/Unmute/Toggle Channel A/B/C/D/All
+- D20: Select Array Processing Preset for Channel A/B/C/D/All
 
 **Available Variables for D&B Audio Amps**
 

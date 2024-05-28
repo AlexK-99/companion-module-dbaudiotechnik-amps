@@ -1,7 +1,7 @@
 {
 	"id": "d-und-b-amps",
-	"name": "D&B-Audio-Amps",
-	"shortname": "D&B-AMPS",
+	"name": "d&b Amps",
+	"shortname": "d&b-Amps",
 	"description": "Control D&B Amps",
 	"version": "0.2.1",
 	"license": "MIT",
@@ -20,7 +20,7 @@
 		"entrypoint": "../main.js"
 	},
 	"legacyIds": ["d-und-b-5d"],
-	"manufacturer": "D&B-Audio",
-	"products": ["5D"],
-	"keywords": ["Amp", "Audio"]
+	"manufacturer": "d&b audiotechnik",
+	"products": ["5D","10D","30D","40D","D20","D40","D80"],
+	"keywords": ["Amp", "Audio","d&b"]
 }
