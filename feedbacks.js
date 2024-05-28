@@ -35,8 +35,8 @@ export async function updateF(self) {
 			type: 'boolean',
 			label: 'Power Amp',
 			defaultStyle: {
-				bgcolor: combineRgb(255, 0, 0),
-				color: combineRgb(255, 255, 255),
+				bgcolor: combineRgb(0, 255, 0),
+				color: combineRgb(0, 0, 0),
 			},
 			options: [],
 			callback: (feedback) => {
