@@ -14,7 +14,7 @@ export function updateA(self) {
 						{ id: 0, label: 'Off' },
 						{ id: -1, label: 'Toggle' },
 					],
-					default: 0,
+					default: -1,
 				},
 			],
 			callback: async (event) => {
@@ -89,7 +89,7 @@ export function updateA(self) {
 						{ id: 3, label: 'D' },
 						{ id: -1, label: 'All' },
 					],
-					default: 0,
+					default: -1,
 				},
 			],
 			callback: async (event) => {
@@ -132,7 +132,7 @@ export function updateA(self) {
 						{ id: 3, label: 'D' },
 						{ id: -1, label: 'All' },
 					],
-					default: 0,
+					default: -1,
 				},
 			],
 			callback: async (event) => {
@@ -175,7 +175,7 @@ export function updateA(self) {
 						{ id: 3, label: 'D' },
 						{ id: -1, label: 'All' },
 					],
-					default: 0,
+					default: -1,
 				},
 			],
 			callback: async (event) => {
