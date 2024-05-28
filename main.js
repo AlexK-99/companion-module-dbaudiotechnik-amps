@@ -20,7 +20,7 @@ class ModuleInstance extends InstanceBase {
 		this.ready = false
 		this.updateActions(InstanceStatus.Connecting)
 		this.updateVariableDefinitions()
-		this.log('info', 'Aes70 Device Connection at port: ' + this.port)
+		this.log('info', 'AES70 Device Connection at port: ' + this.port)
 		this.connect()
 	}
 
@@ -103,14 +103,14 @@ class ModuleInstance extends InstanceBase {
 			port: this.port,
 		})
 			.then((con) => {
-				this.log('info', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connected');
+				this.log('info', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connected');
 				this.aescon = con
 				this.remoteDevice = new RemoteDevice(con)
 				this.remoteDevice.set_keepalive_interval(1)
 				this.remoteDevice.on("close", (args)=> {
-					this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection closed!')
+					this.log('warn', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connection closed!')
 					this.ready = false
-					this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection Error try reconnect in 10 Seconds!')
+					this.log('warn', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connection Error try reconnect in 10 Seconds!')
 					this.updateStatus(InstanceStatus.ConnectionFailure)
 					setTimeout(() => {
 						this.updateStatus(InstanceStatus.Connecting)
@@ -120,10 +120,10 @@ class ModuleInstance extends InstanceBase {
 				})
 
 				this.remoteDevice.on("error", (args)=> {
-					this.log('warn', 'Date: '+ new Date().toISOString() +' | Aes70 Device Connection closed with Error!')
+					this.log('warn', 'Date: '+ new Date().toISOString() +' | AES70 Device Connection closed with Error!')
 					this.log('error', JSON.stringify(args))
 					this.ready = false
-					this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection Error try reconnect in 10 Seconds!')
+					this.log('warn', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connection Error try reconnect in 10 Seconds!')
 					setTimeout(() => {
 						this.updateStatus(InstanceStatus.UnknownError, JSON.stringify(args)	);
 						this.destroy()
@@ -213,7 +213,7 @@ class ModuleInstance extends InstanceBase {
 			})
 			.catch((e) => {
 				this.ready = false
-				this.log('warn', 'Date: '+ new Date().toISOString()  +' | Aes70 Device Connection Error try reconnect in 10 Seconds!')
+				this.log('warn', 'Date: '+ new Date().toISOString()  +' | AES70 Device Connection Error try reconnect in 10 Seconds!')
 				setTimeout(() => {
 					this.connect()
 					this.updateStatus(InstanceStatus.UnknownError, JSON.stringify(e)	);

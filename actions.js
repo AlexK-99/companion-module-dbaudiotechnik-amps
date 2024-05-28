@@ -12,7 +12,7 @@ export function updateA(self) {
 					choices: [
 						{ id: 1, label: 'On' },
 						{ id: 0, label: 'Off' },
-						{ id: -1, label: 'Toggel' },
+						{ id: -1, label: 'Toggle' },
 					],
 					default: 0,
 				},
@@ -162,10 +162,10 @@ export function updateA(self) {
 			},
 		},
 		toggelmute_action: {
-			name: 'Toggel Amp Channel',
+			name: 'Toggle Amp Channel',
 			options: [
 				{
-					id: 'toggelmute',
+					id: 'togglemute',
 					type: 'dropdown',
 					label: 'Channel',
 					choices: [
@@ -180,7 +180,7 @@ export function updateA(self) {
 			],
 			callback: async (event) => {
 				if (self.ready) {
-					if (event.options.toggelmute === -1) {
+					if (event.options.togglemute === -1) {
 						self.muteObj.forEach((obj, index) => {
 							obj
 								.GetState()
@@ -210,23 +210,23 @@ export function updateA(self) {
 								})
 						})
 					} else {
-						self.muteObj[event.options.toggelmute]
+						self.muteObj[event.options.togglemute]
 							.GetState()
 							.then((v) => {
 								if (v === Types.OcaMuteState.Muted) {
-									self.muteObj[event.options.toggelmute]
+									self.muteObj[event.options.togglemute]
 										.SetState(Types.OcaMuteState.Unmuted)
 										.then(() => {
-											self.log('info', 'Unmute Ch: ' + numberToChar(event.options.toggelmute))
+											self.log('info', 'Unmute Ch: ' + numberToChar(event.options.togglemute))
 										})
 										.catch((err) => {
 											self.log('error', err.toString())
 										})
 								} else {
-									self.muteObj[event.options.toggelmute]
+									self.muteObj[event.options.togglemute]
 										.SetState(Types.OcaMuteState.Muted)
 										.then(() => {
-											self.log('info', 'Mute Ch: ' + numberToChar(event.options.toggelmute))
+											self.log('info', 'Mute Ch: ' + numberToChar(event.options.togglemute))
 										})
 										.catch((err) => {
 											self.log('error', err.toString())
