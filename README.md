@@ -15,3 +15,5 @@ Updates
 0.2.0 - Start of implementation different types of amplifiers
 <br>
 0.2.1 - Add Support 40D
+<br>
+0.3.0 - Add Support for 10D, 30D, D20, D80 and array processing preset selection for D20 amps
