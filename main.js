@@ -107,6 +107,10 @@ class ModuleInstance extends InstanceBase {
 		this.setVariableValues({[varindex]: mute})
 	}
 
+	setAmpAPpreset(APpreset){
+		// ap preset variables and feedback should get set here
+	}
+
 	connect() {
 		TCPConnection.connect({
 			host: this.config.host,

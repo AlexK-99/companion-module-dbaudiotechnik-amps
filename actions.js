@@ -1,4 +1,4 @@
-import { Types } from 'aes70'
+import { Types, RemoteControlClasses } from 'aes70';
 
 export function updateA(self) {
 	self.setActionDefinitions({
@@ -238,6 +238,66 @@ export function updateA(self) {
 							})
 					}
 				}
+			},
+		},
+		loadAPpreset_action: {
+			name: 'Load Array Processing Preset (D20)',
+			options: [
+				{
+					id: 'APspeaker',
+					type: 'dropdown',
+					label: 'Speaker',
+					choices: [
+						{ id: 0, label: 'A' },
+						{ id: 1, label: 'B' },
+						{ id: 2, label: 'C' },
+						{ id: 3, label: 'D' },
+						{ id: -1, label: 'All' },
+					],
+					default: -1,
+				},
+				{
+					id: 'APpreset',
+					type: 'dropdown',
+					label: 'Preset Number',
+					choices: [
+						{ id: 0, label: '1 (bypass)' },
+						{ id: 1, label: '2' },
+						{ id: 2, label: '3' },
+						{ id: 3, label: '4' },
+						{ id: 4, label: '5' },
+						{ id: 5, label: '6' },
+						{ id: 6, label: '7' },
+						{ id: 7, label: '8' },
+						{ id: 8, label: '9' },
+						{ id: 9, label: '10' },
+					],
+					default: 0,
+				},
+			],
+			callback: async (event) => {
+				// ideally, one would not use the aes70 object numbers, but the roles ArrayProcessing/ArrayProcessing_Name1 to 40 to be compatible with other amps
+				const startONo = 269521410;			
+				const channelOffset = 32768;
+				const presetOffset = 1048576;
+				try {
+					if (event.options.APspeaker === -1) { // All speakers selected
+						for (let i = 0; i < 4; i++) {
+							const switchID = startONo + event.options.APpreset * presetOffset + i * channelOffset;
+							const fanSwitch = new RemoteControlClasses.OcaSwitch(switchID.toString(), self.remoteDevice);
+							await fanSwitch.SetPosition(1);
+							self.log('info', 'Switch ' + switchID + ' set to ON');
+						}
+					} else { // Individual speaker selected
+						const switchID = startONo + event.options.APpreset * presetOffset + event.options.APspeaker * channelOffset;
+						const fanSwitch = new RemoteControlClasses.OcaSwitch(switchID.toString(), self.remoteDevice);
+						await fanSwitch.SetPosition(1);
+						self.log('info', 'Switch ' + switchID + ' set to ON');
+					}
+				} catch (error) {
+					self.log('error', 'Error setting switch position:', error);
+				}
+				// }
 			},
 		},
 	})
