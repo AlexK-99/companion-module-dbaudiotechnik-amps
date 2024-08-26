@@ -12,12 +12,12 @@
 		"url": "git+https://github.com/AlexK-99/companion-module-d-und-b-amps"
 	},
 	"dependencies": {
-		"@companion-module/base": "~1.5.1",
-		"aes70": "^1.5.2"
+		"@companion-module/base": "^1.5.1",
+		"aes70": "^1.5.3"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^1.4.1",
-		"prettier": "3.0.3"
+		"prettier": "^3.0.3"
 	},
 	"prettier": "@companion-module/tools/.prettierrc.json"
 }
