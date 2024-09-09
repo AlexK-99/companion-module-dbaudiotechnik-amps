@@ -12,17 +12,17 @@ class ModuleInstance extends InstanceBase {
 	async init(config) {
 		this.config = config
 		this.port = this.getPortFromType(config.type)
-		this.type = config.type;
+		this.type = config.type
 		this.info = {}
 		this.muteObj = []
 		this.muteState = [true, true, true, true]
 		this.powerState = true
 		this.powerHours = 0
 		this.powerObj = {}
-		this.presetNames = [];
-		this.presetStates = [];
-		this.ampPresetAgent = undefined;
-		this.presetLast = undefined;
+		this.presetNames = []
+		this.presetStates = []
+		this.ampPresetAgent = undefined
+		this.presetLast = undefined
 		this.ready = true
 		this.updateActions(InstanceStatus.Connecting)
 		this.updateVariableDefinitions()
@@ -88,52 +88,47 @@ class ModuleInstance extends InstanceBase {
 		this.setVariableValues({ [varindex]: mute })
 	}
 
-	setAmpPresets(preset){
-
-	}
+	setAmpPresets(preset) {}
 
 	readAmpPresetNames(map) {
-		if(this.type == "5D") {
-			return;
+		if (this.type == '5D') {
+			return
 		}
 
-		for(let i = 1; i <= 15; i++) {
-			const no = map.get("Preset/Preset_PresetName"+i);
-			no.GetSetting().then((v,l) => {
-				this.presetNames[i-1] = v
+		for (let i = 1; i <= 15; i++) {
+			const no = map.get('Preset/Preset_PresetName' + i)
+			no.GetSetting().then((v, l) => {
+				this.presetNames[i - 1] = v
 				let varindex = `amp_preset_${i}`
-				this.setVariableValues({[varindex]: v})
+				this.setVariableValues({ [varindex]: v })
 			})
-			no.OnSettingChanged.subscribe((v) =>{
-				this.presetNames[i-1] = v
+			no.OnSettingChanged.subscribe((v) => {
+				this.presetNames[i - 1] = v
 				let varindex = `amp_preset_${i}`
-				this.setVariableValues({[varindex]: v})
-			});
+				this.setVariableValues({ [varindex]: v })
+			})
 		}
-
 	}
 
 	readAmpPresetStates(map) {
-		if(this.type == "5D") {
-			return;
+		if (this.type == '5D') {
+			return
 		}
 
-		for(let i = 1; i <= 15; i++) {
-			const no = map.get("Preset/Preset_PresetState"+i);
-			no.GetReading().then((v,l) => {
-				this.presetStates[i-1] = v
+		for (let i = 1; i <= 15; i++) {
+			const no = map.get('Preset/Preset_PresetState' + i)
+			no.GetReading().then((v, l) => {
+				this.presetStates[i - 1] = v
 				let varindex = `amp_preset_state_${i}`
-				this.setVariableValues({[varindex]: v})
+				this.setVariableValues({ [varindex]: v })
 			})
-			no.OnReadingChanged.subscribe((v) =>{
-				this.presetStates[i-1] = v;
+			no.OnReadingChanged.subscribe((v) => {
+				this.presetStates[i - 1] = v
 				let varindex = `amp_preset_state_${i}`
-				this.setVariableValues({[varindex]: v})
-			});
+				this.setVariableValues({ [varindex]: v })
+			})
 		}
-
 	}
-
 
 	setAmpAPpreset(APpreset) {
 		// ap preset variables and feedback should get set here
@@ -179,7 +174,7 @@ class ModuleInstance extends InstanceBase {
 					}, 10000)
 				})
 				if (this.ready) {
-    				this.remoteDevice.add_control_classes([AmpPresets]);
+					this.remoteDevice.add_control_classes([AmpPresets])
 
 					this.updateActions() // export actions
 					this.updateFeedbacks() // export feedbacks
@@ -226,12 +221,12 @@ class ModuleInstance extends InstanceBase {
 								this.checkFeedbacks('PowerState')
 							})
 						}
-						if(this.type !== "5D") {
-							this.ampPresetAgent = map.get("AmpPresets");
+						if (this.type !== '5D') {
+							this.ampPresetAgent = map.get('AmpPresets')
 						}
 
-						this.readAmpPresetNames(map);
-						this.readAmpPresetStates(map);
+						this.readAmpPresetNames(map)
+						this.readAmpPresetStates(map)
 					})
 					this.remoteDevice.get_device_tree().then((tree) => {
 						var i = 0
@@ -290,7 +285,7 @@ class ModuleInstance extends InstanceBase {
 		this.muteObj.forEach((v) => {
 			v.OnStateChanged.unsubscribe()
 		})
-		this.presetNames.forEach((pn) =>{
+		this.presetNames.forEach((pn) => {
 			pn.OnSettingChanged.unsubscribe()
 		})
 		this.powerObj.OnPositionChanged.unsubscribe()
@@ -302,14 +297,14 @@ class ModuleInstance extends InstanceBase {
 	async configUpdated(config) {
 		this.config = config
 		this.port = this.getPortFromType(config.type)
-		this.type =  config.type;
+		this.type = config.type
 		if (this.aescon) {
 			this.muteObj = []
 			this.aescon.cleanup()
 			this.updateStatus(InstanceStatus.Connecting)
 			this.connect()
 		}
-		this.updateVariableDefinitions();
+		this.updateVariableDefinitions()
 	}
 
 	// Return config fields for web config

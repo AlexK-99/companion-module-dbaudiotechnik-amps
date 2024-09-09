@@ -1,5 +1,4 @@
 export async function updateV(self) {
-
 	const varList = [
 		{ variableId: 'amp_type', name: 'Amp Type' },
 		{ variableId: 'amp_name', name: 'Amp Name' },
@@ -12,7 +11,7 @@ export async function updateV(self) {
 		{ variableId: 'amp_mute_3', name: 'Amp Mute Ch4' },
 	]
 
-	if(self.type != "5D") {
+	if (self.type != '5D') {
 		varList.push(
 			//{ variableId: 'amp_preset_last', name: 'Amp Preset Last'},
 			{ variableId: 'amp_preset_1', name: 'Amp Preset User 1' },
@@ -44,7 +43,7 @@ export async function updateV(self) {
 			{ variableId: 'amp_preset_state_12', name: 'Amp Preset State Alarm 3' },
 			{ variableId: 'amp_preset_state_13', name: 'Amp Preset State Backup 1' },
 			{ variableId: 'amp_preset_state_14', name: 'Amp Preset State Backup 2' },
-			{ variableId: 'amp_preset_state_15', name: 'Amp Preset State Backup 3' }
+			{ variableId: 'amp_preset_state_15', name: 'Amp Preset State Backup 3' },
 		)
 	}
 

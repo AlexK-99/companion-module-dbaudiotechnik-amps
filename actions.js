@@ -241,7 +241,7 @@ export function updateA(self) {
 				}
 			},
 		},
-	reCallAmpPreset_action: {
+		reCallAmpPreset_action: {
 			name: 'Recall Amp Preset',
 			options: [
 				{
@@ -265,23 +265,28 @@ export function updateA(self) {
 						{ id: 14, label: '14' },
 						{ id: 15, label: '15' },
 					],
-					default: 1
-
-				}
+					default: 1,
+				},
 			],
 			callback: async (event) => {
-				if(self.presetStates[event.options.amp_preset-1]) {
-					if(self.ampPresetAgent instanceof AmpPresets) {
-						self.ampPresetAgent.SetPreset(event.options.amp_preset).then(() => {
-								self.log('info', 'Amp Preset ' + event.options.amp_preset + " recalled successfully!" )
-						}).catch((err) => {
-							self.log('error', 'Error recall Amp Preset:', error)
-						})
+				if (self.presetStates[event.options.amp_preset - 1]) {
+					if (self.ampPresetAgent instanceof AmpPresets) {
+						self.ampPresetAgent
+							.SetPreset(event.options.amp_preset)
+							.then(() => {
+								self.log('info', 'Amp Preset ' + event.options.amp_preset + ' recalled successfully!')
+							})
+							.catch((err) => {
+								self.log('error', 'Error recall Amp Preset:', error)
+							})
 					}
-				}else {
-					self.log("info", "Selected preset cannot be recalled! \n No preset saved on slot: "+ event.options.amp_preset)
+				} else {
+					self.log(
+						'info',
+						'Selected preset cannot be recalled! \n No preset saved on slot: ' + event.options.amp_preset,
+					)
 				}
-			}
+			},
 		},
 		loadAPpreset_action: {
 			name: 'Load Array Processing Preset (D20)',
