@@ -1,4 +1,5 @@
-import { Types, RemoteControlClasses } from 'aes70';
+import { Types, RemoteControlClasses } from 'aes70'
+import { AmpPresets } from './amp-presets.js'
 
 export function updateA(self) {
 	self.setActionDefinitions({
@@ -240,6 +241,48 @@ export function updateA(self) {
 				}
 			},
 		},
+	reCallAmpPreset_action: {
+			name: 'Recall Amp Preset',
+			options: [
+				{
+					id: 'amp_preset',
+					type: 'dropdown',
+					label: 'AmpPreset Number',
+					choices: [
+						{ id: 1, label: '1' },
+						{ id: 2, label: '2' },
+						{ id: 3, label: '3' },
+						{ id: 4, label: '4' },
+						{ id: 5, label: '5' },
+						{ id: 6, label: '6' },
+						{ id: 7, label: '7' },
+						{ id: 8, label: '8' },
+						{ id: 9, label: '9' },
+						{ id: 10, label: '10' },
+						{ id: 11, label: '11' },
+						{ id: 12, label: '12' },
+						{ id: 13, label: '13' },
+						{ id: 14, label: '14' },
+						{ id: 15, label: '15' },
+					],
+					default: 1
+
+				}
+			],
+			callback: async (event) => {
+				if(self.presetStates[event.options.amp_preset-1]) {
+					if(self.ampPresetAgent instanceof AmpPresets) {
+						self.ampPresetAgent.SetPreset(event.options.amp_preset).then(() => {
+								self.log('info', 'Amp Preset ' + event.options.amp_preset + " recalled successfully!" )
+						}).catch((err) => {
+							self.log('error', 'Error recall Amp Preset:', error)
+						})
+					}
+				}else {
+					self.log("info", "Selected preset cannot be recalled! \n No preset saved on slot: "+ event.options.amp_preset)
+				}
+			}
+		},
 		loadAPpreset_action: {
 			name: 'Load Array Processing Preset (D20)',
 			options: [
@@ -277,25 +320,27 @@ export function updateA(self) {
 			],
 			callback: async (event) => {
 				// ideally, one would not use the aes70 object numbers, but the roles ArrayProcessing/ArrayProcessing_Enable1 to 40 to be compatible with other amps, where Enable1 is speaker a preset 1, Enable5 speaker a preset 2 etc.
-				const startONo = 269521410;			
-				const channelOffset = 32768;
-				const presetOffset = 1048576;
+				const startONo = 269521410
+				const channelOffset = 32768
+				const presetOffset = 1048576
 				try {
-					if (event.options.APspeaker === -1) { // All speakers selected
+					if (event.options.APspeaker === -1) {
+						// All speakers selected
 						for (let i = 0; i < 4; i++) {
-							const switchID = startONo + event.options.APpreset * presetOffset + i * channelOffset;
-							const fanSwitch = new RemoteControlClasses.OcaSwitch(switchID.toString(), self.remoteDevice);
-							await fanSwitch.SetPosition(1);
-							self.log('info', 'Switch ' + switchID + ' set to ON');
+							const switchID = startONo + event.options.APpreset * presetOffset + i * channelOffset
+							const fanSwitch = new RemoteControlClasses.OcaSwitch(switchID.toString(), self.remoteDevice)
+							await fanSwitch.SetPosition(1)
+							self.log('info', 'Switch ' + switchID + ' set to ON')
 						}
-					} else { // Individual speaker selected
-						const switchID = startONo + event.options.APpreset * presetOffset + event.options.APspeaker * channelOffset;
-						const fanSwitch = new RemoteControlClasses.OcaSwitch(switchID.toString(), self.remoteDevice);
-						await fanSwitch.SetPosition(1);
-						self.log('info', 'Switch ' + switchID + ' set to ON');
+					} else {
+						// Individual speaker selected
+						const switchID = startONo + event.options.APpreset * presetOffset + event.options.APspeaker * channelOffset
+						const fanSwitch = new RemoteControlClasses.OcaSwitch(switchID.toString(), self.remoteDevice)
+						await fanSwitch.SetPosition(1)
+						self.log('info', 'Switch ' + switchID + ' set to ON')
 					}
 				} catch (error) {
-					self.log('error', 'Error setting switch position:', error);
+					self.log('error', 'Error setting switch position:', error)
 				}
 				// }
 			},

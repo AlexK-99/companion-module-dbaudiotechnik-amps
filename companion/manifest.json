@@ -3,7 +3,7 @@
 	"name": "d&b Amps",
 	"shortname": "d&b-Amps",
 	"description": "Control D&B Amps",
-	"version": "0.3.0",
+	"version": "0.4:0",
 	"license": "MIT",
 	"repository": "git+https://github.com/AlexK-99/companion-module-d-und-b-amps.git",
 	"bugs": "https://github.com/AlexK-99/companion-module-d-und-b-amps/issues",
@@ -21,6 +21,6 @@
 	},
 	"legacyIds": ["d-und-b-5d"],
 	"manufacturer": "d&b audiotechnik",
-	"products": ["5D","10D","30D","40D","D20","D40","D80"],
-	"keywords": ["Amp", "Audio","d&b"]
+	"products": ["5D", "10D", "30D", "40D", "D20", "D40", "D80"],
+	"keywords": ["Amp", "Audio", "d&b"]
 }

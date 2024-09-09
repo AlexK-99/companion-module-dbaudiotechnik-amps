@@ -19,3 +19,5 @@ Updates
 0.3.0 - Add Support for 10D, 30D, D20, D80 and array processing preset selection for D20 amps
 <br>
 0.3.1 - update dependency AES70
+<br>
+0.4.0 - Add AmpPreset Recall and Variables AmpPreset Names / AmpPreset State

@@ -1,26 +1,30 @@
-## d&b audiotechnik Amps
+# d&b audiotechnik Amps
 
 Specify the IP address of the amp you want to connect to.
 
-**Supported d&b audiotechnik Amps**
+### Supported d&b audiotechnik Amps ###
+
 - 5D
-- 10D (untested)
-- 30D (untested)
+- 10D **(untested)**
+- 30D **(untested)**
 - 40D
 - D20
 - D40
 - D80
 
-**Available commands for d&b audiotechnik Amps**
+### Available commands for d&b audiotechnik Amps ###
 
 - Power On/Off/Toggle
 - Mute/Unmute/Toggle Channel A/B/C/D/All
 - D20: Select Array Processing Preset for Channel A/B/C/D/All
+- Recall AmpPreset **(not for 5D)** **(tested with 40D other amps must be tested)**
 
-**Available Variables for d&b audiotechnik Amps**
+### Available Variables for d&b audiotechnik Amps ###
 
 - Amp Type
 - Amp Name
 - Amp Firmware
 - Power State
 - Mute State Channel A/B/C/D
+- Amp Preset Names **(not for 5D)** **(tested with 40D other amps must be tested)**
+- Amp Perset States **(not for 5D)** **(tested with 40D other amps must be tested)**
