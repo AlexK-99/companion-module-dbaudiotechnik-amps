@@ -88,8 +88,6 @@ class ModuleInstance extends InstanceBase {
 		this.setVariableValues({ [varindex]: mute })
 	}
 
-	setAmpPresets(preset) {}
-
 	readAmpPresetNames(map) {
 		if (this.type == '5D') {
 			return
@@ -97,7 +95,7 @@ class ModuleInstance extends InstanceBase {
 
 		for (let i = 1; i <= 15; i++) {
 			const no = map.get('Preset/Preset_PresetName' + i)
-			no.GetSetting().then((v, l) => {
+			no.GetSetting().then((v) => {
 				this.presetNames[i - 1] = v
 				let varindex = `amp_preset_${i}`
 				this.setVariableValues({ [varindex]: v })
@@ -116,16 +114,38 @@ class ModuleInstance extends InstanceBase {
 		}
 
 		for (let i = 1; i <= 15; i++) {
-			const no = map.get('Preset/Preset_PresetState' + i)
-			no.GetReading().then((v, l) => {
+			const so = map.get('Preset/Preset_PresetState' + i)
+			so.GetReading().then((v) => {
 				this.presetStates[i - 1] = v
 				let varindex = `amp_preset_state_${i}`
 				this.setVariableValues({ [varindex]: v })
 			})
-			no.OnReadingChanged.subscribe((v) => {
+			so.OnReadingChanged.subscribe((v) => {
 				this.presetStates[i - 1] = v
 				let varindex = `amp_preset_state_${i}`
 				this.setVariableValues({ [varindex]: v })
+			})
+		}
+	}
+
+	readAmpPresetLastReCall(map) {
+		if (this.type == '5D') {
+			return
+		}
+
+		let lastcallstates = 0
+		for (let i = 1; i <= 15; i++) {
+			const ro = map.get('Preset/Preset_LastPreset' + i)
+			ro.GetReading().then((v) => {
+				if (v['values'][0] > 0) {
+					lastcallstates = i
+				}
+
+				if (i === 15) {
+					this.setVariableValues({ amp_preset_last: lastcallstates })
+					this.presetLast = lastcallstates
+					this.checkFeedbacks('LastAmpPreset')
+				}
 			})
 		}
 	}
@@ -205,19 +225,11 @@ class ModuleInstance extends InstanceBase {
 						if (map.get(this.getPowerPath(this.config.type))) {
 							this.powerObj = map.get(this.getPowerPath(this.config.type))
 							this.powerObj.GetPosition().then((v) => {
-								if (v.item(0) == 0) {
-									this.setAmpPower(true)
-								} else {
-									this.setAmpPower(false)
-								}
+								this.setAmpPower(v.item(0) === 0)
 								this.checkFeedbacks('PowerState')
 							})
 							this.powerObj.OnPositionChanged.subscribe((val) => {
-								if (val == 0) {
-									this.setAmpPower(true)
-								} else {
-									this.setAmpPower(false)
-								}
+								this.setAmpPower(val === 0)
 								this.checkFeedbacks('PowerState')
 							})
 						}
@@ -227,6 +239,7 @@ class ModuleInstance extends InstanceBase {
 
 						this.readAmpPresetNames(map)
 						this.readAmpPresetStates(map)
+						this.readAmpPresetLastReCall(map)
 					})
 					this.remoteDevice.get_device_tree().then((tree) => {
 						var i = 0
@@ -239,19 +252,11 @@ class ModuleInstance extends InstanceBase {
 											if (i === 3) {
 												this.muteObj.forEach((v, index) => {
 													v.GetState().then((v) => {
-														if (v === Types.OcaMuteState.Muted) {
-															this.setAmpMute(index, true)
-														} else {
-															this.setAmpMute(index, false)
-														}
+														this.setAmpMute(index, v === Types.OcaMuteState.Muted)
 														this.checkFeedbacks('ChannelState')
 													})
 													v.OnStateChanged.subscribe((val) => {
-														if (val == 1) {
-															this.setAmpMute(index, true)
-														} else {
-															this.setAmpMute(index, false)
-														}
+														this.setAmpMute(index, val == 1)
 														this.checkFeedbacks('ChannelState')
 													})
 												})
@@ -316,7 +321,7 @@ class ModuleInstance extends InstanceBase {
 				label: 'Amp IP',
 				width: 8,
 				regex: Regex.IP,
-				default: '168.178.10.110',
+				default: '169.254.0.1',
 			},
 			{
 				id: 'type',

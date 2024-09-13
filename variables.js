@@ -13,7 +13,7 @@ export async function updateV(self) {
 
 	if (self.type != '5D') {
 		varList.push(
-			//{ variableId: 'amp_preset_last', name: 'Amp Preset Last'},
+			{ variableId: 'amp_preset_last', name: 'Last Amp Preset Recall' },
 			{ variableId: 'amp_preset_1', name: 'Amp Preset User 1' },
 			{ variableId: 'amp_preset_2', name: 'Amp Preset User 2' },
 			{ variableId: 'amp_preset_3', name: 'Amp Preset User 3' },

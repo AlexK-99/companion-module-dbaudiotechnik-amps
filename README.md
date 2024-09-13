@@ -21,3 +21,5 @@ Updates
 0.3.1 - update dependency AES70
 <br>
 0.4.0 - Add AmpPreset Recall and Variables AmpPreset Names / AmpPreset State
+<br>
+1.0.0 - Add Variable Last Amp Preset Recall / Feedback Last Amp Preset Recall (First release)

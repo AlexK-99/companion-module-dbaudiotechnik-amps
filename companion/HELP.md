@@ -16,8 +16,8 @@ Specify the IP address of the amp you want to connect to.
 
 - Power On/Off/Toggle
 - Mute/Unmute/Toggle Channel A/B/C/D/All
-- D20: Select Array Processing Preset for Channel A/B/C/D/All
-- Recall AmpPreset **(not for 5D)** **(tested with 40D other amps must be tested)**
+- Select Array Processing Preset for Channel A/B/C/D/All **(only for D20, other amplifiers will follow)**
+- Recall AmpPreset **(not for 5D)** **(tested with 40D other amplifiers must be tested)**
 
 ### Available Variables for d&b audiotechnik Amps
 
