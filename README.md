@@ -1,4 +1,4 @@
-# companion-module-d&b-amp
+# companion-module-dbaudiotechnik-amp
 
 See [HELP.md](./companion/HELP.md) and [LICENSE](./LICENSE)
 
